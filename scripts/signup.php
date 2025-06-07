@@ -11,25 +11,7 @@ function passDifferent(string $password, string $passwordConf): bool {
 
 
 //database
-function storeOtp(object $conn, string $email, string $otp, string $verification_type, string|null $action): void {
-    if (!$action) {
-        $query = "INSERT INTO otp_verifications(email, otp, verification_type, expires_at)
-        VALUES(:email, :otp, :verification_type, NOW() + INTERVAL 3 minute);";
-        $stmt = $conn->prepare($query);
-        $stmt->execute([
-            ":email" => $email,
-            ":otp" => $otp,
-            ":verification_type" => $verification_type
-        ]);
-    } elseif ($action === "resend") {
-        $query = "UPDATE otp_verifications SET otp = :otp, expires_at = NOW() + INTERVAL 3 minute WHERE email = :email;";
-        $stmt = $conn->prepare($query);
-        $stmt->execute([
-            ":otp" => $otp,
-            ":email" => $email
-        ]);
-    }
-}
+
 
 function initialRegister(object $conn, bool $existing, string $email, string $hashed_pass): void {
     if (!$existing) {
@@ -92,15 +74,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (interval($conn, $email)) {
                 storeOtp($conn, $email, $hashed_otp, $verification_type, $action);
                 sendEmail($email, $message, $subject);
-                echo "We've sent a new OTP to $email";
+                echo "We\'ve sent a new OTP to $email";
             } else {
-                echo "<script>alert('Please wait a moment before resending OTP.'); window.location.href = 'http://localhost/IAS-FDC-MTR/pages/verify.php';</script>";
+                echo "<script>alert('Please wait a moment before resending OTP.'); window.location.href = '/IAS-FDC-MTR/pages/verify.php';</script>";
                 die();
             }
         } else {
             storeOtp($conn, $email, $hashed_otp, $verification_type, $action);
             sendEmail($email, $message, $subject);
-            echo "We've sent an OTP to $email";
+            echo "We\'ve sent an OTP to $email";
         }
         $_SESSION["form_action"] = "/IAS-FDC-MTR/scripts/verify.php";
         $_SESSION["email"] = $email;

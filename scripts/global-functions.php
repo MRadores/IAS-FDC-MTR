@@ -74,3 +74,23 @@ function interval(object $conn, string $email): array | bool {
     ]);
     return $stmt->fetch(\PDO::FETCH_ASSOC);
 }
+
+function storeOtp(object $conn, string $email, string $otp, string $verification_type, string|null $action): void {
+    if (!$action) {
+        $query = "INSERT INTO otp_verifications(email, otp, verification_type, expires_at)
+        VALUES(:email, :otp, :verification_type, NOW() + INTERVAL 3 minute);";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([
+            ":email" => $email,
+            ":otp" => $otp,
+            ":verification_type" => $verification_type
+        ]);
+    } elseif ($action === "resend") {
+        $query = "UPDATE otp_verifications SET otp = :otp, expires_at = NOW() + INTERVAL 3 minute WHERE email = :email;";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([
+            ":otp" => $otp,
+            ":email" => $email
+        ]);
+    }
+}
