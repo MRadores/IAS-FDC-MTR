@@ -28,7 +28,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
             $errors["Input_Empty"] = "Fill in all fields!";
         } elseif(invalidEmail($email)){
             $errors["Invalid_Email"] = "Please enter a valid email.";
-        } elseif (!emailExisting($conn, $email) || wrongPass($conn, $email, $password) {
+        } elseif (!emailExisting($conn, $email) || wrongPass($conn, $email, $password)) {
             $errors["Wrong_credentials"] = "Wrong login credentials";
         }
 
