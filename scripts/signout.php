@@ -7,8 +7,11 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
     session_start();
     session_unset();
     session_destroy();
-    header("location: index.php");
+    // header("location: index.php");
     // $_SESSION["signed_in"] = false;
+    echo "<script>alert('successfully logged out..'); window.location.href = '/IAS-FDC-MTR/'</script>";
+    exit();
 } else {
-    echo "<scripts>Alert('Invalid request method.')</scripts>";
+    echo "<scripts>alert('Invalid request method.'); window.location.href = '/IAS-FDC-MTR/'</scripts>";
+    die();
 }

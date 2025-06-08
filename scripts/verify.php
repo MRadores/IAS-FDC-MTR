@@ -36,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     try {
         $otp = $_POST["otp"] ??  null;
         $email = $_POST["email"] ??  null;
+        $auth = $_GET["auth"] ?? '';
 
         require_once __DIR__ ."/db.php";
         require_once __DIR__ ."/global-functions.php";
@@ -58,8 +59,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         updateStatus($conn, $email);
         deleteUserOtp($conn, $email);
-        echo "<script>alert('Account successfully verified!'); window.location.href = '/IAS-FDC-MTR/index.php'</script>";
-        die();
+        if ($_GET["auth"] == "signup") {
+            echo "<script>alert('Account successfully verified!'); window.location.href = '/IAS-FDC-MTR/index.php'</script>";
+        } elseif ($_GET["auth"] == "login") {
+            echo "<script>alert('Succesfully loggged in!'); window.location.href = '/IAS-FDC-MTR/pages/home.php'</script>";
+        }
+        exit();
 
     } catch (\PDOException $e) {
         echo "Connection Error: " . $e->getMessage();

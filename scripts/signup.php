@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (interval($conn, $email)) {
                 storeOtp($conn, $email, $hashed_otp, $verification_type, $action);
                 sendEmail($email, $message, $subject);
-                echo "We\'ve sent a new OTP to $email";
+                // echo "<script>alert('We\'ve sent a new OTP to $email'); windows.location.href = '/IAS-FDC-MTR/pages/verify.php'</script>";
             } else {
                 echo "<script>alert('Please wait a moment before resending OTP.'); window.location.href = '/IAS-FDC-MTR/pages/verify.php';</script>";
                 die();
@@ -82,14 +82,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } else {
             storeOtp($conn, $email, $hashed_otp, $verification_type, $action);
             sendEmail($email, $message, $subject);
-            echo "We\'ve sent an OTP to $email";
         }
-        $_SESSION["form_action"] = "/IAS-FDC-MTR/scripts/verify.php";
+        $_SESSION["form_action"] = "/IAS-FDC-MTR/scripts/verify.php?auth=signup";
         $_SESSION["email"] = $email;
         $_SESSION["password"] = $password;
         $_SESSION["passwordConf"] = $passwordConf;
 
-        header("Location: /IAS-FDC-MTR/pages/verify.php");
+        echo "<script>alert('We\'ve sent a new OTP to $email'); window.location.href = '/IAS-FDC-MTR/pages/verify.php'</script>";
+        // header("Location: /IAS-FDC-MTR/pages/verify.php");
         exit();
 
     } catch (\PDOException $e) {

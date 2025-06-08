@@ -1,5 +1,8 @@
 <?php
 session_start();
+if ($_SESSION["signed_in"] !== true) {
+    echo "<script>alert('User not signed in'); window.location.href = '/IAS-FDC-MTR/index.php'</script>";
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +14,7 @@ session_start();
 <body>
     <h1>WELCOME <?= $_SESSION["email"]?></h1>
 
-    <form action="signout.php" method="POST">
+    <form action="/IAS-FDC-MTR/scripts/signout.php" method="POST">
         <button type="submit">SIGNOUT</button>
     </form>
 </body>
